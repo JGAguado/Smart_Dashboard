@@ -1,0 +1,196 @@
+substitutions:
+  device_name: "smart-dashboard"
+  friendly_name: "Smart Dashboard"
+  project_name: "smart.dashboard"
+  project_version: "2.1"
+  ap_ssid: "Smart-Dashboard"
+  ap_pwd: "smartdashboard"
+
+esphome:
+  name: "${device_name}"
+  name_add_mac_suffix: true
+  includes:
+    - libraries/icon-map.h
+    - libraries/MAX17048.h
+  libraries:
+    - "Wire"
+    - "SPI"
+  project:
+    name: "${project_name}"
+    version: "${project_version}"
+  # Initialize the IIC bus immediatelly after the powering the sensors
+  on_boot:
+    priority: 600
+    then:
+     - lambda: |-
+        Wire.begin();
+        delay(100);
+
+
+esp32:
+  board: esp32-s2-saola-1
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+# Enable Over The Air updates
+ota:
+
+#Public location of this yaml file
+dashboard_import:
+  package_import_url: github://JGAguado/Smart_Dashboard/docs/source/files/configuration.yaml
+  import_full_config: false
+
+# Enable fallback hotspot (captive portal) in case wifi connection fails
+captive_portal:
+
+improv_serial:
+
+wifi:
+  ap:
+    ssid: "${ap_ssid}"
+    password: "${ap_pwd}"
+
+
+i2c:
+  scl: GPIO34
+  sda: GPIO33
+  scan: false
+  id: bus_a
+  frequency: 50kHz
+
+spi:
+  clk_pin:  GPIO36
+  miso_pin: GPIO35
+
+
+font:
+  - file: "gfonts://Audiowide"
+    id: font_title
+    size: 20
+  - file: "gfonts://Audiowide"
+    id: font_subtitle
+    size: 15
+  - file: "gfonts://Audiowide"
+    id: font_parameters
+    size: 15
+  - file: 'fonts/materialdesignicons-webfont.ttf'
+    id: font_icon_battery
+    size: 20
+    glyphs:
+      - "\U000F007A" # battery-10
+      - "\U000F007B" # battery-20
+      - "\U000F007C" # battery-30
+      - "\U000F007D" # battery-40
+      - "\U000F007E" # battery-50
+      - "\U000F007F" # battery-60
+      - "\U000F0080" # battery-70
+      - "\U000F0081" # battery-80
+      - "\U000F0082" # battery-90
+      - "\U000F0079" # battery
+      - "\U000F0083" # battery-alert
+      - "\U000F10CC" # battery-alert-variant
+      - "\U000F10CD" # battery-alert-variant-outline
+      - "\U000F092D" # wifi-off
+      - "\U000F092E" # wifi-strength-0
+      - "\U000F091F" # wifi-strength-1
+      - "\U000F0922" # wifi-strength-2
+      - "\U000F0925" # wifi-strength-3
+      - "\U000F0928" # wifi-strength-4
+      - "\U000F04E6" # sync
+
+# Include time
+time:
+  - platform: homeassistant
+    id: esptime
+
+
+switch:
+  - platform: gpio
+    pin: GPIO13
+    id: exc
+    name: "Excitation switch"
+    icon: "mdi:power"
+    restore_mode: ALWAYS_ON  
+    
+    
+sensor:    
+  # Battery level sensor  
+  - platform: custom
+    lambda: |-
+      auto max17048_sensor = new MAX17048Sensor();
+      App.register_component(max17048_sensor);
+      return {max17048_sensor->voltage_sensor, max17048_sensor->percentage_sensor};
+    sensors:
+      - name: "Bat. voltage"
+        unit_of_measurement: V
+        accuracy_decimals: 2
+        id: batvoltage
+
+      - name: "Battery"
+        id: battery
+        icon: "mdi:battery"
+        unit_of_measurement: '%'
+
+  # Temperature - Air pressure 
+  - platform: bmp280
+    temperature:
+      name: "Internal Temperature"
+      oversampling: 16x
+    pressure:
+      name: "Absolute Pressure"
+    address: 0x77
+    i2c_id: bus_a
+
+  # WiFi Signal     
+  - platform: wifi_signal
+    name: "WiFi Signal Sensor"
+    id: wifisignal
+    update_interval: 20s
+
+    
+display:
+  - platform: waveshare_epaper
+    id: my_display
+    cs_pin: GPIO8
+    dc_pin: GPIO7
+    busy_pin: 
+      number: GPIO5
+      inverted: true
+    reset_pin: GPIO6
+    model: 7.50inV2 
+    update_interval: never
+    auto_clear_enabled: false
+    lambda: |-
+      it.fill(COLOR_OFF);
+
+      
+      // WiFi
+      if(id(wifisignal).has_state ()) {
+        if (id(wifisignal).state >= -50) {
+            // Excellent # mdi-wifi-strength-4 "\U000F0928" 255, 230
+            it.printf(795, 20, id(font_icon_small), TextAlign::TOP_RIGHT, wifi_icon_map[4].c_str());
+        } else if (id(wifisignal).state  >= -60) {
+            //Good # mdi-wifi-strength-3 "\U000F0925"
+            it.printf(795, 20, id(font_icon_small), TextAlign::TOP_RIGHT, wifi_icon_map[3].c_str());
+        } else if (id(wifisignal).state  >= -67) {
+            //Fair # mdi-wifi-strength-2 "\U000F0922"
+            it.printf(795, 20, id(font_icon_small), TextAlign::TOP_RIGHT, wifi_icon_map[2].c_str());
+        } else if (id(wifisignal).state  >= -70) {
+            //Weak # mdi-wifi-strength-1 "\U000F091F"
+            it.printf(795, 20, id(font_icon_small), TextAlign::TOP_RIGHT, wifi_icon_map[1].c_str());
+        } else {
+            //Unlikely working signal # mdi-wifi-strength-alert-outline "\U000F092B"
+            it.printf(795, 20, id(font_icon_small), TextAlign::TOP_RIGHT, wifi_icon_map[0].c_str());
+        }
+      } 
+          
+# # Uncomment it if you want the SmartDashboard to enter into deep sleep
+# deep_sleep:
+#   run_duration: 10s
+#   sleep_duration: 3600s

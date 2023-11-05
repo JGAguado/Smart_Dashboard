@@ -2,13 +2,12 @@
 [![Documentation Status][documentation-shield]][documentation]
 [![GitHub Release][releases-shield]][releases]
 [![License][license-shield]](LICENSE)
-[![BuyIt][buyit-shield]][tindie]
 
 [![Project Maintenance][maintenance-shield]][maintenance]
 [![BuyMeCoffee][buymecoffee-shield]][buymecoffee]
 
 # Smart Dashboard
-The Smart Dashboard is a platform to help display any kind of information on two kinds of ePaper display: the 7.5" black & white display and the 7.3" 7-colors display, both from Waveshare. It includes a BMP280 sensor for temperature, humidity and pressure as well as all the electronics to work with the minimum power consumption, supporting solar charging.
+The Smart Dashboard is a platform to help display any kind of information on two kinds of ePaper display: the 7.5" black & white display and the 7.3" 7-colors display, both from Waveshare. It includes a BMP280 sensor for air temperature and pressure as well as all the electronics to work with the minimum power consumption, supporting solar charging.
 
 <p float="left">
    <img src="./Documentation/Images/Top.png" width="49%">
@@ -38,5 +37,3 @@ The Smart Dashboard is a platform to help display any kind of information on two
 [buymecoffee-shield]: https://img.shields.io/badge/buy%20me%20a%20coffee-support-yellow.svg?style=for-the-badge
 [buymecoffee]: https://www.buymeacoffee.com/J.G.Aguado
 
-[buyit-shield]: https://img.shields.io/badge/get%20it%20on-tindie-247d84.svg?style=for-the-badge
-[tindie]: https://www.tindie.com/products/jgaguado/smart-dashboard/
