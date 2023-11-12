@@ -25,18 +25,16 @@ Electronic schematics
 
 
 .. _dock:
+
 Dock stand
+-----------------------
 
 .. Caution::
     The following enclosure was designed for 5050100 (100x50x5mm) 4000mAh LiPo battery. The recommended battery wouldn't fit in this enclosure.
 
 
------------------------
 .. image:: ../../Enclosure/Render.png
     :width: 100%
 
-
-Standard version
-^^^^^^^^^^^^^^^^^
  - :download:`Bottom <../../Enclosure/Bottom.stl>`
  - :download:`Top <../../Enclosure/Top.stl>`

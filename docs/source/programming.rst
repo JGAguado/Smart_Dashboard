@@ -134,7 +134,9 @@ different than with any other ESP32 devices:
 5. Now you can select the board *ESP32 Dev Module* as the target board. Leave the rest of parameters 
    by default.
 6. The right libraries from the e-paper displays can be found directly at Waveshare's documentation website:
+
 - `800×480, 7.5" E-Ink display <https://www.waveshare.com/wiki/7.5inch_e-Paper_HAT_Manual#Working_With_Arduino>`_.
 - `800×480, 7.3" ACeP 7-Color E-Ink Display <https://www.waveshare.com/wiki/7.3inch_e-Paper_HAT_(F)_Manual#Working_With_Arduino>`_.
+
 7. Select the correct port and remember to enter the board into flashing mode before uploading the sketch.
 

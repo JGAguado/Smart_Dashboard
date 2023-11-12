@@ -8,7 +8,7 @@ with the components assembled.
 
 The |Product|, in addition to the PCB assembled board, consist on the following parts:
 
-- An e-paper display. The recommended (and tested working) e-ink panels are the `800×480, 7.5" E-Ink display <https://www.waveshare.com/7.5inch-e-Paper.htm>`_ or the . 
+- An e-paper display. The recommended (and tested working) e-ink panels are the `800×480, 7.5" E-Ink display <https://www.waveshare.com/7.5inch-e-Paper.htm>`_ or the  
   `800×480, 7.3" ACeP 7-Color E-Ink Display <https://www.waveshare.com/7.3inch-e-Paper-F.htm>`_. Please note only one display can be connected at the same time and 
   that **other displays may not work at all**.
 - A :term:`LiPo` battery, with a recommended 5000mAh capacity, for space and power. The 6060100 3.7V 5000mAh LiPo battery meets this criteria.
@@ -42,9 +42,6 @@ The USB Type-C is a very extended port for portable electronics, and because of 
 
 Sensors
 --------
-.. figure:: ../../Documentation/Images/SP_Top.png
-    :align: right
-    :figwidth: 200px
     
 As the |Product| is intended to work during long periods of time without having to be recharged, it is important to avoid undesired consumptions 
 durint the deep-sleep periods. This implies that the sensors have to be powered **only** when they are needed. 
@@ -79,6 +76,7 @@ E-paper
 --------
 
 The |Product| is capable of driving two different e-paper displays: 
+
 - `800×480, 7.5" E-Ink display <https://www.waveshare.com/7.5inch-e-Paper.htm>`_.
 - `800×480, 7.3" ACeP 7-Color E-Ink Display <https://www.waveshare.com/7.3inch-e-Paper-F.htm>`_.
 
@@ -103,6 +101,6 @@ However only one can be driven at the same time, since they share the SPI bus pi
     * - 8
       - CS
 
-Enclosure
----------
-The |Product| PCB can be mounted in a custom :ref:`enclosure` that you can print on your own 3D printer.
+Dock stand
+------------
+The |Product| PCB can be mounted in a custom :ref:`dock` that you can print on your own 3D printer.

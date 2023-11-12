@@ -24,7 +24,7 @@ Power
     :stub-columns: 1
 
     * - Battery 
-      - LiPo 3.7 V 1000 mAh
+      - LiPo 3.7 V 5000 mAh
     * - Input (USB/Solar panel)
       - 5V @ 500mA
 
@@ -43,13 +43,11 @@ Features
     * - 
       - UART
     * - Display
-      - 2.9" e-paper 
+      - 7.5" B&W E-Ink display 
+    * - 
+      - 7.3" ACeP 7-Color E-Ink Display
     * - Sensors
-      - Capacitive soil moisture probe (analog)
-    * - 
-      - VEML7700-TR illuminance sensor (digital :math:`I^2C`)
-    * - 
-      - AHT20 air temperature & relative humidity sensor (digital :math:`I^2C`)
+      - BMP280 air temperature & pressure (digital :math:`I^2C`)
     * - 
       - MAX17048 battery voltage level sensor (digital :math:`I^2C`)
 
@@ -62,14 +60,9 @@ Dimensions
     :stub-columns: 1
 
     * - Size 
-      - 130x80x7mm
-    * - 
-      - 132x84x15mm with enclosure
+      - 100x30mm
     * - Weight
-      - 20g
-    * - 
-      - 45g with battery
-
+      - 15g
 
 Environment
 -----------
