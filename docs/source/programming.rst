@@ -73,7 +73,7 @@ In the folder structure above:
 ``Screenshot bw.png``
     This is the background image to serve as an example of any background image you can add to your Smart Dashboard.
 
-    .. image:: images/programming/Screenshot bw.png
+    .. image:: images/programming/Screenshot.png
         :width: 50%
 
 
