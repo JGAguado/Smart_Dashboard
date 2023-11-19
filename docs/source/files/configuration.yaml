@@ -2,7 +2,7 @@ substitutions:
   device_name: "smart-dashboard"
   friendly_name: "Smart Dashboard"
   project_name: "smart.dashboard"
-  project_version: "2.1"
+  project_version: "1.1"
   ap_ssid: "Smart-Dashboard"
   ap_pwd: "smartdashboard"
 
@@ -10,7 +10,6 @@ esphome:
   name: "${device_name}"
   name_add_mac_suffix: true
   includes:
-    - libraries/icon-map.h
     - libraries/MAX17048.h
   libraries:
     - "Wire"
@@ -26,6 +25,7 @@ esphome:
         Wire.begin();
         delay(100);
 
+     - script.execute: consider_deep_sleep
 
 esp32:
   board: esp32-s2-saola-1
@@ -41,6 +41,7 @@ api:
 # Enable Over The Air updates
 ota:
 
+
 #Public location of this yaml file
 dashboard_import:
   package_import_url: github://JGAguado/Smart_Dashboard/docs/source/files/configuration.yaml
@@ -52,6 +53,9 @@ captive_portal:
 improv_serial:
 
 wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
   ap:
     ssid: "${ap_ssid}"
     password: "${ap_pwd}"
@@ -73,42 +77,6 @@ font:
   - file: "gfonts://Audiowide"
     id: font_title
     size: 20
-  - file: "gfonts://Audiowide"
-    id: font_subtitle
-    size: 15
-  - file: "gfonts://Audiowide"
-    id: font_parameters
-    size: 15
-  - file: 'fonts/materialdesignicons-webfont.ttf'
-    id: font_icon_battery
-    size: 20
-    glyphs:
-      - "\U000F007A" # battery-10
-      - "\U000F007B" # battery-20
-      - "\U000F007C" # battery-30
-      - "\U000F007D" # battery-40
-      - "\U000F007E" # battery-50
-      - "\U000F007F" # battery-60
-      - "\U000F0080" # battery-70
-      - "\U000F0081" # battery-80
-      - "\U000F0082" # battery-90
-      - "\U000F0079" # battery
-      - "\U000F0083" # battery-alert
-      - "\U000F10CC" # battery-alert-variant
-      - "\U000F10CD" # battery-alert-variant-outline
-      - "\U000F092D" # wifi-off
-      - "\U000F092E" # wifi-strength-0
-      - "\U000F091F" # wifi-strength-1
-      - "\U000F0922" # wifi-strength-2
-      - "\U000F0925" # wifi-strength-3
-      - "\U000F0928" # wifi-strength-4
-      - "\U000F04E6" # sync
-
-# Include time
-time:
-  - platform: homeassistant
-    id: esptime
-
 
 switch:
   - platform: gpio
@@ -153,7 +121,10 @@ sensor:
     id: wifisignal
     update_interval: 20s
 
-    
+image:
+  - file: "images/Screenshot bw.png"
+    id: screenshot
+
 display:
   - platform: waveshare_epaper
     id: my_display
@@ -163,34 +134,36 @@ display:
       number: GPIO5
       inverted: true
     reset_pin: GPIO6
-    model: 7.50inV2 
+    model: 7.50inV2alt
+    reset_duration: 2ms
     update_interval: never
     auto_clear_enabled: false
     lambda: |-
-      it.fill(COLOR_OFF);
+      it.image(0, 0, id(screenshot));
 
-      
-      // WiFi
-      if(id(wifisignal).has_state ()) {
-        if (id(wifisignal).state >= -50) {
-            // Excellent # mdi-wifi-strength-4 "\U000F0928" 255, 230
-            it.printf(795, 20, id(font_icon_small), TextAlign::TOP_RIGHT, wifi_icon_map[4].c_str());
-        } else if (id(wifisignal).state  >= -60) {
-            //Good # mdi-wifi-strength-3 "\U000F0925"
-            it.printf(795, 20, id(font_icon_small), TextAlign::TOP_RIGHT, wifi_icon_map[3].c_str());
-        } else if (id(wifisignal).state  >= -67) {
-            //Fair # mdi-wifi-strength-2 "\U000F0922"
-            it.printf(795, 20, id(font_icon_small), TextAlign::TOP_RIGHT, wifi_icon_map[2].c_str());
-        } else if (id(wifisignal).state  >= -70) {
-            //Weak # mdi-wifi-strength-1 "\U000F091F"
-            it.printf(795, 20, id(font_icon_small), TextAlign::TOP_RIGHT, wifi_icon_map[1].c_str());
-        } else {
-            //Unlikely working signal # mdi-wifi-strength-alert-outline "\U000F092B"
-            it.printf(795, 20, id(font_icon_small), TextAlign::TOP_RIGHT, wifi_icon_map[0].c_str());
-        }
-      } 
-          
-# # Uncomment it if you want the SmartDashboard to enter into deep sleep
-# deep_sleep:
-#   run_duration: 10s
-#   sleep_duration: 3600s
+deep_sleep:
+  id: deep_sleep_control
+  # run_duration: 5s
+  sleep_duration: 1h
+
+script:
+  - id: consider_deep_sleep
+    mode: queued
+    then:
+      - delay: 5s
+      - component.update: my_display   
+      - delay: 5s           
+      - if:
+          condition:
+            sensor.in_range:
+              id: batvoltage
+              above: 4.15
+          then:
+            - deep_sleep.prevent: deep_sleep_control 
+          else:
+            - deep_sleep.enter: deep_sleep_control 
+
+      - delay: 25s
+      - script.execute: consider_deep_sleep          
+
+

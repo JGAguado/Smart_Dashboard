@@ -58,10 +58,9 @@ As an example of such configuration setup (and the one flashed on the factory se
 with all the dependencies:
 
 | esphome
-| ├── fonts
-| │   └── materialdesignicons-webfont_5.9.55.ttf
+| ├── images
+| │   └── Screenshot bw.png
 | ├── libraries
-| │   └── icon-map.h
 | │   └── MAX17048.h
 | └── smart-dashboard.yaml
 | 
@@ -70,34 +69,12 @@ with all the dependencies:
 
 In the folder structure above:
 
-``materialdesignicons-webfont_5.9.55.ttf`` 
-    As with the previous file, this is a file containing a set of the icons fonts (the battery voltage level). 
-    
-    In this case I used :term:`MDI` from `google <https://github.com/google/material-design-icons/blob/master/font/MaterialIcons-Regular.ttf>`_
-    (version 5.9.55), but shouldn't be any problem to look for the latest. 
 
-``icon-map.h`` 
-    This *mapping* file is used to associate a variable name with the *icon ID* from the previous file. It contains the following code:
-  
-.. code-block:: C
-   :linenos:
+``Screenshot bw.png``
+    This is the background image to serve as an example of any background image you can add to your Smart Dashboard.
 
-   #include <map>
-   std::map<int, std::string> battery_icon_map
-   {
-    {0, "\U000F10CD"},
-    {1, "\U000F007A"},
-    {2, "\U000F007B"},
-    {3, "\U000F007C"},
-    {4, "\U000F007D"},
-    {5, "\U000F007E"},
-    {6, "\U000F007F"},
-    {7, "\U000F0080"},
-    {8, "\U000F0081"},
-    {9, "\U000F0082"},
-    {10, "\U000F0079"},
-   };
-
+    .. image:: images/programming/Screenshot bw.png
+        :width: 50%
 
 
 
