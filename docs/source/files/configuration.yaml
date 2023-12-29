@@ -2,7 +2,7 @@ substitutions:
   device_name: "smart-dashboard"
   friendly_name: "Smart Dashboard"
   project_name: "smart.dashboard"
-  project_version: "1.1"
+  project_version: "1.0"
   ap_ssid: "Smart-Dashboard"
   ap_pwd: "smartdashboard"
 
